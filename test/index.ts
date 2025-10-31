@@ -11,5 +11,5 @@ const quickJS: QuickJSGlobal = null!;
 const currentJS: CurrentGlobal = null!;
 
 
-// Correct Type check
+// Correct Type check, we need to add specified missing apis
 console.log(quickJS satisfies CurrentGlobal, currentJS satisfies QuickJSGlobal);
