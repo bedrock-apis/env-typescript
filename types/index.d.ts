@@ -43,3 +43,5 @@
 /// <reference lib="es2023.array" />
 /// <reference lib="es2023.collection" />
 /// <reference path="./globals.d.ts" />
+
+interface InternalError extends Error { }
