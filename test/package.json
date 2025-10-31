@@ -12,5 +12,8 @@
   "packageManager": "pnpm@10.20.0",
   "devDependencies": {
     "@bedrock-apis/env-typescript": "link:.."
+  },
+  "dependencies": {
+    "@minecraft/server": "^2.3.0"
   }
 }
