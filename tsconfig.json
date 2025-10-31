@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "lib": ["es2024"],
+    "moduleResolution": "bundler",
+    "strict": false,
+    "noImplicitAny": false,
+    "rootDir": "src",
+    "baseUrl": "src",
+    "paths": {
+      "@minecraft/server": ["node_modules/@minecraft/server/index"]
+    },
+    "types": ["@minecraft/server","./index.d.ts"]
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
+}
