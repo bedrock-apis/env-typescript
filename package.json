@@ -1,0 +1,11 @@
+{
+  "name": "@bedrock-apis/env-typescript",
+  "version": "1.0.0-alpha.1",
+  "description": "Package for more robust and correct global types for script api environment",
+  "types": "./src/index.d.ts",
+  "keywords": [],
+  "author": "bedrock-apis",
+  "license": "MIT",
+  "packageManager": "pnpm@10.20.0",
+  "type": "module"
+}
