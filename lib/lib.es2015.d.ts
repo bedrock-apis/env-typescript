@@ -16,29 +16,13 @@ and limitations under the License.
 
 /// <reference no-default-lib="true"/>
 
+/// <reference lib="es5" />
+/// <reference lib="es2015.core" />
+/// <reference lib="es2015.collection" />
+/// <reference lib="es2015.iterable" />
+/// <reference lib="es2015.generator" />
+/// <reference lib="es2015.promise" />
+/// <reference lib="es2015.proxy" />
+/// <reference lib="es2015.reflect" />
 /// <reference lib="es2015.symbol" />
 /// <reference lib="es2015.symbol.wellknown" />
-
-interface SharedArrayBuffer {
-    /**
-     * Read-only. The length of the ArrayBuffer (in bytes).
-     */
-    readonly byteLength: number;
-
-    /**
-     * Returns a section of an SharedArrayBuffer.
-     */
-    slice(begin?: number, end?: number): SharedArrayBuffer;
-    readonly [Symbol.species]: SharedArrayBuffer;
-    readonly [Symbol.toStringTag]: "SharedArrayBuffer";
-}
-
-interface SharedArrayBufferConstructor {
-    readonly prototype: SharedArrayBuffer;
-    new (byteLength?: number): SharedArrayBuffer;
-}
-declare var SharedArrayBuffer: SharedArrayBufferConstructor;
-
-interface ArrayBufferTypes {
-    SharedArrayBuffer: SharedArrayBuffer;
-}

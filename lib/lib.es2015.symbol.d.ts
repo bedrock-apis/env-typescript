@@ -16,14 +16,31 @@ and limitations under the License.
 
 /// <reference no-default-lib="true"/>
 
-/// <reference lib="es2015.iterable" />
-/// <reference lib="es2020.symbol.wellknown" />
-
-interface String {
+interface SymbolConstructor {
     /**
-     * Matches a string with a regular expression, and returns an iterable of matches
-     * containing the results of that search.
-     * @param regexp A variable name or string literal containing the regular expression pattern and flags.
+     * A reference to the prototype.
      */
-    matchAll(regexp: RegExp): RegExpStringIterator<RegExpExecArray>;
+    readonly prototype: Symbol;
+
+    /**
+     * Returns a new unique Symbol value.
+     * @param  description Description of the new Symbol object.
+     */
+    (description?: string | number): symbol;
+
+    /**
+     * Returns a Symbol object from the global symbol registry matching the given key if found.
+     * Otherwise, returns a new symbol with this key.
+     * @param key key to search for.
+     */
+    for(key: string): symbol;
+
+    /**
+     * Returns a key from the global symbol registry matching the given Symbol if found.
+     * Otherwise, returns a undefined.
+     * @param sym Symbol to find the key for.
+     */
+    keyFor(sym: symbol): string | undefined;
 }
+
+declare var Symbol: SymbolConstructor;

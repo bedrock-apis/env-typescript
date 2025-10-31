@@ -16,9 +16,6 @@ and limitations under the License.
 
 /// <reference no-default-lib="true"/>
 
-/// <reference lib="decorators" />
-/// <reference lib="decorators.legacy" />
-
 /////////////////////////////
 /// ECMAScript APIs
 /////////////////////////////
@@ -696,7 +693,7 @@ interface Math {
      */
     atan(x: number): number;
     /**
-     * Returns the angle (in radians) from the X axis to a point.
+     * Returns the angle (in radians) between the X axis and the line going through both the origin and the given point.
      * @param y A numeric expression representing the cartesian y-coordinate.
      * @param x A numeric expression representing the cartesian x-coordinate.
      */
@@ -1158,6 +1155,7 @@ interface JSON {
      * @param text A valid JSON string.
      * @param reviver A function that transforms the results. This function is called for each member of the object.
      * If a member contains nested objects, the nested objects are transformed before the parent object is.
+     * @throws {SyntaxError} If `text` is not valid JSON.
      */
     parse(text: string, reviver?: (this: any, key: string, value: any) => any): any;
     /**
@@ -1165,6 +1163,7 @@ interface JSON {
      * @param value A JavaScript value, usually an object or array, to be converted.
      * @param replacer A function that transforms the results.
      * @param space Adds indentation, white space, and line break characters to the return-value JSON text to make it easier to read.
+     * @throws {TypeError} If a circular reference or a BigInt value is found.
      */
     stringify(value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string;
     /**
@@ -1172,6 +1171,7 @@ interface JSON {
      * @param value A JavaScript value, usually an object or array, to be converted.
      * @param replacer An array of strings and numbers that acts as an approved list for selecting the object properties that will be stringified.
      * @param space Adds indentation, white space, and line break characters to the return-value JSON text to make it easier to read.
+     * @throws {TypeError} If a circular reference or a BigInt value is found.
      */
     stringify(value: any, replacer?: (number | string)[] | null, space?: string | number): string;
 }
@@ -1260,8 +1260,8 @@ interface ReadonlyArray<T> {
     some(predicate: (value: T, index: number, array: readonly T[]) => unknown, thisArg?: any): boolean;
     /**
      * Performs the specified action for each element in an array.
-     * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the array.
-     * @param thisArg  An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+     * @param callbackfn A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the array.
+     * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
      */
     forEach(callbackfn: (value: T, index: number, array: readonly T[]) => void, thisArg?: any): void;
     /**
@@ -1384,7 +1384,7 @@ interface Array<T> {
      * This method mutates the array and returns a reference to the same array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
      * a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
-     * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+     * value otherwise. If omitted, the elements are sorted in ascending, UTF-16 code unit order.
      * ```ts
      * [11,2,22,1].sort((a, b) => a - b)
      * ```
@@ -1393,14 +1393,18 @@ interface Array<T> {
     /**
      * Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
      * @param start The zero-based location in the array from which to start removing elements.
-     * @param deleteCount The number of elements to remove.
+     * @param deleteCount The number of elements to remove. Omitting this argument will remove all elements from the start
+     * paramater location to end of the array. If value of this argument is either a negative number, zero, undefined, or a type
+     * that cannot be converted to an integer, the function will evaluate the argument as zero and not remove any elements.
      * @returns An array containing the elements that were deleted.
      */
     splice(start: number, deleteCount?: number): T[];
     /**
      * Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
      * @param start The zero-based location in the array from which to start removing elements.
-     * @param deleteCount The number of elements to remove.
+     * @param deleteCount The number of elements to remove. If value of this argument is either a negative number, zero,
+     * undefined, or a type that cannot be converted to an integer, the function will evaluate the argument as zero and
+     * not remove any elements.
      * @param items Elements to insert into the array in place of the deleted elements.
      * @returns An array containing the elements that were deleted.
      */
@@ -1451,8 +1455,8 @@ interface Array<T> {
     some(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): boolean;
     /**
      * Performs the specified action for each element in an array.
-     * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the array.
-     * @param thisArg  An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+     * @param callbackfn A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the array.
+     * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
      */
     forEach(callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any): void;
     /**
@@ -1958,9 +1962,9 @@ interface Int8Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
 
     /**
      * Performs the specified action for each element in an array.
-     * @param callbackfn  A function that accepts up to three arguments. forEach calls the
+     * @param callbackfn A function that accepts up to three arguments. forEach calls the
      * callbackfn function one time for each element in the array.
-     * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
     forEach(callbackfn: (value: number, index: number, array: this) => void, thisArg?: any): void;
@@ -1969,7 +1973,7 @@ interface Int8Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
      * Returns the index of the first occurrence of a value in an array.
      * @param searchElement The value to locate in the array.
      * @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the
-     *  search starts at index 0.
+     * search starts at index 0.
      */
     indexOf(searchElement: number, fromIndex?: number): number;
 
@@ -2121,6 +2125,7 @@ interface Int8ArrayConstructor {
     new (length: number): Int8Array<ArrayBuffer>;
     new (array: ArrayLike<number>): Int8Array<ArrayBuffer>;
     new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(buffer: TArrayBuffer, byteOffset?: number, length?: number): Int8Array<TArrayBuffer>;
+    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int8Array<ArrayBuffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Int8Array<ArrayBuffer>;
 
     /**
@@ -2136,13 +2141,13 @@ interface Int8ArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param arrayLike An array-like object to convert to an array.
      */
     from(arrayLike: ArrayLike<number>): Int8Array<ArrayBuffer>;
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param arrayLike An array-like object to convert to an array.
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
@@ -2239,9 +2244,9 @@ interface Uint8Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
 
     /**
      * Performs the specified action for each element in an array.
-     * @param callbackfn  A function that accepts up to three arguments. forEach calls the
+     * @param callbackfn A function that accepts up to three arguments. forEach calls the
      * callbackfn function one time for each element in the array.
-     * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
     forEach(callbackfn: (value: number, index: number, array: this) => void, thisArg?: any): void;
@@ -2250,7 +2255,7 @@ interface Uint8Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
      * Returns the index of the first occurrence of a value in an array.
      * @param searchElement The value to locate in the array.
      * @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the
-     *  search starts at index 0.
+     * search starts at index 0.
      */
     indexOf(searchElement: number, fromIndex?: number): number;
 
@@ -2402,6 +2407,7 @@ interface Uint8ArrayConstructor {
     new (length: number): Uint8Array<ArrayBuffer>;
     new (array: ArrayLike<number>): Uint8Array<ArrayBuffer>;
     new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(buffer: TArrayBuffer, byteOffset?: number, length?: number): Uint8Array<TArrayBuffer>;
+    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8Array<ArrayBuffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Uint8Array<ArrayBuffer>;
 
     /**
@@ -2417,13 +2423,13 @@ interface Uint8ArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param arrayLike An array-like object to convert to an array.
      */
     from(arrayLike: ArrayLike<number>): Uint8Array<ArrayBuffer>;
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param arrayLike An array-like object to convert to an array.
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
@@ -2520,9 +2526,9 @@ interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike = ArrayBufferLi
 
     /**
      * Performs the specified action for each element in an array.
-     * @param callbackfn  A function that accepts up to three arguments. forEach calls the
+     * @param callbackfn A function that accepts up to three arguments. forEach calls the
      * callbackfn function one time for each element in the array.
-     * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
     forEach(callbackfn: (value: number, index: number, array: this) => void, thisArg?: any): void;
@@ -2531,7 +2537,7 @@ interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike = ArrayBufferLi
      * Returns the index of the first occurrence of a value in an array.
      * @param searchElement The value to locate in the array.
      * @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the
-     *  search starts at index 0.
+     * search starts at index 0.
      */
     indexOf(searchElement: number, fromIndex?: number): number;
 
@@ -2683,6 +2689,7 @@ interface Uint8ClampedArrayConstructor {
     new (length: number): Uint8ClampedArray<ArrayBuffer>;
     new (array: ArrayLike<number>): Uint8ClampedArray<ArrayBuffer>;
     new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(buffer: TArrayBuffer, byteOffset?: number, length?: number): Uint8ClampedArray<TArrayBuffer>;
+    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8ClampedArray<ArrayBuffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Uint8ClampedArray<ArrayBuffer>;
 
     /**
@@ -2698,13 +2705,13 @@ interface Uint8ClampedArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param arrayLike An array-like object to convert to an array.
      */
     from(arrayLike: ArrayLike<number>): Uint8ClampedArray<ArrayBuffer>;
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param arrayLike An array-like object to convert to an array.
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
@@ -2801,9 +2808,9 @@ interface Int16Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
 
     /**
      * Performs the specified action for each element in an array.
-     * @param callbackfn  A function that accepts up to three arguments. forEach calls the
+     * @param callbackfn A function that accepts up to three arguments. forEach calls the
      * callbackfn function one time for each element in the array.
-     * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
     forEach(callbackfn: (value: number, index: number, array: this) => void, thisArg?: any): void;
@@ -2811,7 +2818,7 @@ interface Int16Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
      * Returns the index of the first occurrence of a value in an array.
      * @param searchElement The value to locate in the array.
      * @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the
-     *  search starts at index 0.
+     * search starts at index 0.
      */
     indexOf(searchElement: number, fromIndex?: number): number;
 
@@ -2963,6 +2970,7 @@ interface Int16ArrayConstructor {
     new (length: number): Int16Array<ArrayBuffer>;
     new (array: ArrayLike<number>): Int16Array<ArrayBuffer>;
     new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(buffer: TArrayBuffer, byteOffset?: number, length?: number): Int16Array<TArrayBuffer>;
+    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int16Array<ArrayBuffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Int16Array<ArrayBuffer>;
 
     /**
@@ -2978,13 +2986,13 @@ interface Int16ArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param arrayLike An array-like object to convert to an array.
      */
     from(arrayLike: ArrayLike<number>): Int16Array<ArrayBuffer>;
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param arrayLike An array-like object to convert to an array.
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
@@ -3081,9 +3089,9 @@ interface Uint16Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
 
     /**
      * Performs the specified action for each element in an array.
-     * @param callbackfn  A function that accepts up to three arguments. forEach calls the
+     * @param callbackfn A function that accepts up to three arguments. forEach calls the
      * callbackfn function one time for each element in the array.
-     * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
     forEach(callbackfn: (value: number, index: number, array: this) => void, thisArg?: any): void;
@@ -3092,7 +3100,7 @@ interface Uint16Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
      * Returns the index of the first occurrence of a value in an array.
      * @param searchElement The value to locate in the array.
      * @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the
-     *  search starts at index 0.
+     * search starts at index 0.
      */
     indexOf(searchElement: number, fromIndex?: number): number;
 
@@ -3244,6 +3252,7 @@ interface Uint16ArrayConstructor {
     new (length: number): Uint16Array<ArrayBuffer>;
     new (array: ArrayLike<number>): Uint16Array<ArrayBuffer>;
     new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(buffer: TArrayBuffer, byteOffset?: number, length?: number): Uint16Array<TArrayBuffer>;
+    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint16Array<ArrayBuffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Uint16Array<ArrayBuffer>;
 
     /**
@@ -3259,13 +3268,13 @@ interface Uint16ArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param arrayLike An array-like object to convert to an array.
      */
     from(arrayLike: ArrayLike<number>): Uint16Array<ArrayBuffer>;
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param arrayLike An array-like object to convert to an array.
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
@@ -3361,9 +3370,9 @@ interface Int32Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
 
     /**
      * Performs the specified action for each element in an array.
-     * @param callbackfn  A function that accepts up to three arguments. forEach calls the
+     * @param callbackfn A function that accepts up to three arguments. forEach calls the
      * callbackfn function one time for each element in the array.
-     * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
     forEach(callbackfn: (value: number, index: number, array: this) => void, thisArg?: any): void;
@@ -3372,7 +3381,7 @@ interface Int32Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
      * Returns the index of the first occurrence of a value in an array.
      * @param searchElement The value to locate in the array.
      * @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the
-     *  search starts at index 0.
+     * search starts at index 0.
      */
     indexOf(searchElement: number, fromIndex?: number): number;
 
@@ -3524,6 +3533,7 @@ interface Int32ArrayConstructor {
     new (length: number): Int32Array<ArrayBuffer>;
     new (array: ArrayLike<number>): Int32Array<ArrayBuffer>;
     new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(buffer: TArrayBuffer, byteOffset?: number, length?: number): Int32Array<TArrayBuffer>;
+    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int32Array<ArrayBuffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Int32Array<ArrayBuffer>;
 
     /**
@@ -3539,13 +3549,13 @@ interface Int32ArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param arrayLike An array-like object to convert to an array.
      */
     from(arrayLike: ArrayLike<number>): Int32Array<ArrayBuffer>;
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param arrayLike An array-like object to convert to an array.
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
@@ -3642,9 +3652,9 @@ interface Uint32Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
 
     /**
      * Performs the specified action for each element in an array.
-     * @param callbackfn  A function that accepts up to three arguments. forEach calls the
+     * @param callbackfn A function that accepts up to three arguments. forEach calls the
      * callbackfn function one time for each element in the array.
-     * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
     forEach(callbackfn: (value: number, index: number, array: this) => void, thisArg?: any): void;
@@ -3652,7 +3662,7 @@ interface Uint32Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
      * Returns the index of the first occurrence of a value in an array.
      * @param searchElement The value to locate in the array.
      * @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the
-     *  search starts at index 0.
+     * search starts at index 0.
      */
     indexOf(searchElement: number, fromIndex?: number): number;
 
@@ -3804,6 +3814,7 @@ interface Uint32ArrayConstructor {
     new (length: number): Uint32Array<ArrayBuffer>;
     new (array: ArrayLike<number>): Uint32Array<ArrayBuffer>;
     new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(buffer: TArrayBuffer, byteOffset?: number, length?: number): Uint32Array<TArrayBuffer>;
+    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint32Array<ArrayBuffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Uint32Array<ArrayBuffer>;
 
     /**
@@ -3819,13 +3830,13 @@ interface Uint32ArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param arrayLike An array-like object to convert to an array.
      */
     from(arrayLike: ArrayLike<number>): Uint32Array<ArrayBuffer>;
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param arrayLike An array-like object to convert to an array.
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
@@ -3922,9 +3933,9 @@ interface Float32Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
 
     /**
      * Performs the specified action for each element in an array.
-     * @param callbackfn  A function that accepts up to three arguments. forEach calls the
+     * @param callbackfn A function that accepts up to three arguments. forEach calls the
      * callbackfn function one time for each element in the array.
-     * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
     forEach(callbackfn: (value: number, index: number, array: this) => void, thisArg?: any): void;
@@ -3933,7 +3944,7 @@ interface Float32Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
      * Returns the index of the first occurrence of a value in an array.
      * @param searchElement The value to locate in the array.
      * @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the
-     *  search starts at index 0.
+     * search starts at index 0.
      */
     indexOf(searchElement: number, fromIndex?: number): number;
 
@@ -4085,6 +4096,7 @@ interface Float32ArrayConstructor {
     new (length: number): Float32Array<ArrayBuffer>;
     new (array: ArrayLike<number>): Float32Array<ArrayBuffer>;
     new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(buffer: TArrayBuffer, byteOffset?: number, length?: number): Float32Array<TArrayBuffer>;
+    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Float32Array<ArrayBuffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Float32Array<ArrayBuffer>;
 
     /**
@@ -4100,13 +4112,13 @@ interface Float32ArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param arrayLike An array-like object to convert to an array.
      */
     from(arrayLike: ArrayLike<number>): Float32Array<ArrayBuffer>;
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param arrayLike An array-like object to convert to an array.
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
@@ -4203,9 +4215,9 @@ interface Float64Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
 
     /**
      * Performs the specified action for each element in an array.
-     * @param callbackfn  A function that accepts up to three arguments. forEach calls the
+     * @param callbackfn A function that accepts up to three arguments. forEach calls the
      * callbackfn function one time for each element in the array.
-     * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
+     * @param thisArg An object to which the this keyword can refer in the callbackfn function.
      * If thisArg is omitted, undefined is used as the this value.
      */
     forEach(callbackfn: (value: number, index: number, array: this) => void, thisArg?: any): void;
@@ -4214,7 +4226,7 @@ interface Float64Array<TArrayBuffer extends ArrayBufferLike = ArrayBufferLike> {
      * Returns the index of the first occurrence of a value in an array.
      * @param searchElement The value to locate in the array.
      * @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the
-     *  search starts at index 0.
+     * search starts at index 0.
      */
     indexOf(searchElement: number, fromIndex?: number): number;
 
@@ -4366,6 +4378,7 @@ interface Float64ArrayConstructor {
     new (length: number): Float64Array<ArrayBuffer>;
     new (array: ArrayLike<number>): Float64Array<ArrayBuffer>;
     new <TArrayBuffer extends ArrayBufferLike = ArrayBuffer>(buffer: TArrayBuffer, byteOffset?: number, length?: number): Float64Array<TArrayBuffer>;
+    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Float64Array<ArrayBuffer>;
     new (array: ArrayLike<number> | ArrayBuffer): Float64Array<ArrayBuffer>;
 
     /**
@@ -4381,16 +4394,205 @@ interface Float64ArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param arrayLike An array-like object to convert to an array.
      */
     from(arrayLike: ArrayLike<number>): Float64Array<ArrayBuffer>;
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param arrayLike An array-like object to convert to an array.
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
     from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float64Array<ArrayBuffer>;
 }
 declare var Float64Array: Float64ArrayConstructor;
+
+/////////////////////////////
+/// ECMAScript Internationalization API
+/////////////////////////////
+
+declare namespace Intl {
+    interface CollatorOptions {
+        usage?: "sort" | "search" | undefined;
+        localeMatcher?: "lookup" | "best fit" | undefined;
+        numeric?: boolean | undefined;
+        caseFirst?: "upper" | "lower" | "false" | undefined;
+        sensitivity?: "base" | "accent" | "case" | "variant" | undefined;
+        collation?: "big5han" | "compat" | "dict" | "direct" | "ducet" | "emoji" | "eor" | "gb2312" | "phonebk" | "phonetic" | "pinyin" | "reformed" | "searchjl" | "stroke" | "trad" | "unihan" | "zhuyin" | undefined;
+        ignorePunctuation?: boolean | undefined;
+    }
+
+    interface ResolvedCollatorOptions {
+        locale: string;
+        usage: string;
+        sensitivity: string;
+        ignorePunctuation: boolean;
+        collation: string;
+        caseFirst: string;
+        numeric: boolean;
+    }
+
+    interface Collator {
+        compare(x: string, y: string): number;
+        resolvedOptions(): ResolvedCollatorOptions;
+    }
+
+    interface CollatorConstructor {
+        new (locales?: string | string[], options?: CollatorOptions): Collator;
+        (locales?: string | string[], options?: CollatorOptions): Collator;
+        supportedLocalesOf(locales: string | string[], options?: CollatorOptions): string[];
+    }
+
+    var Collator: CollatorConstructor;
+
+    interface NumberFormatOptionsStyleRegistry {
+        decimal: never;
+        percent: never;
+        currency: never;
+    }
+
+    type NumberFormatOptionsStyle = keyof NumberFormatOptionsStyleRegistry;
+
+    interface NumberFormatOptionsCurrencyDisplayRegistry {
+        code: never;
+        symbol: never;
+        name: never;
+    }
+
+    type NumberFormatOptionsCurrencyDisplay = keyof NumberFormatOptionsCurrencyDisplayRegistry;
+
+    interface NumberFormatOptionsUseGroupingRegistry {}
+
+    type NumberFormatOptionsUseGrouping = {} extends NumberFormatOptionsUseGroupingRegistry ? boolean : keyof NumberFormatOptionsUseGroupingRegistry | "true" | "false" | boolean;
+    type ResolvedNumberFormatOptionsUseGrouping = {} extends NumberFormatOptionsUseGroupingRegistry ? boolean : keyof NumberFormatOptionsUseGroupingRegistry | false;
+
+    interface NumberFormatOptions {
+        localeMatcher?: "lookup" | "best fit" | undefined;
+        style?: NumberFormatOptionsStyle | undefined;
+        currency?: string | undefined;
+        currencyDisplay?: NumberFormatOptionsCurrencyDisplay | undefined;
+        useGrouping?: NumberFormatOptionsUseGrouping | undefined;
+        minimumIntegerDigits?: number | undefined;
+        minimumFractionDigits?: number | undefined;
+        maximumFractionDigits?: number | undefined;
+        minimumSignificantDigits?: number | undefined;
+        maximumSignificantDigits?: number | undefined;
+    }
+
+    interface ResolvedNumberFormatOptions {
+        locale: string;
+        numberingSystem: string;
+        style: NumberFormatOptionsStyle;
+        currency?: string;
+        currencyDisplay?: NumberFormatOptionsCurrencyDisplay;
+        minimumIntegerDigits: number;
+        minimumFractionDigits?: number;
+        maximumFractionDigits?: number;
+        minimumSignificantDigits?: number;
+        maximumSignificantDigits?: number;
+        useGrouping: ResolvedNumberFormatOptionsUseGrouping;
+    }
+
+    interface NumberFormat {
+        format(value: number): string;
+        resolvedOptions(): ResolvedNumberFormatOptions;
+    }
+
+    interface NumberFormatConstructor {
+        new (locales?: string | string[], options?: NumberFormatOptions): NumberFormat;
+        (locales?: string | string[], options?: NumberFormatOptions): NumberFormat;
+        supportedLocalesOf(locales: string | string[], options?: NumberFormatOptions): string[];
+        readonly prototype: NumberFormat;
+    }
+
+    var NumberFormat: NumberFormatConstructor;
+
+    interface DateTimeFormatOptions {
+        localeMatcher?: "best fit" | "lookup" | undefined;
+        weekday?: "long" | "short" | "narrow" | undefined;
+        era?: "long" | "short" | "narrow" | undefined;
+        year?: "numeric" | "2-digit" | undefined;
+        month?: "numeric" | "2-digit" | "long" | "short" | "narrow" | undefined;
+        day?: "numeric" | "2-digit" | undefined;
+        hour?: "numeric" | "2-digit" | undefined;
+        minute?: "numeric" | "2-digit" | undefined;
+        second?: "numeric" | "2-digit" | undefined;
+        timeZoneName?: "short" | "long" | "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric" | undefined;
+        formatMatcher?: "best fit" | "basic" | undefined;
+        hour12?: boolean | undefined;
+        timeZone?: string | undefined;
+    }
+
+    interface ResolvedDateTimeFormatOptions {
+        locale: string;
+        calendar: string;
+        numberingSystem: string;
+        timeZone: string;
+        hour12?: boolean;
+        weekday?: string;
+        era?: string;
+        year?: string;
+        month?: string;
+        day?: string;
+        hour?: string;
+        minute?: string;
+        second?: string;
+        timeZoneName?: string;
+    }
+
+    interface DateTimeFormat {
+        format(date?: Date | number): string;
+        resolvedOptions(): ResolvedDateTimeFormatOptions;
+    }
+
+    interface DateTimeFormatConstructor {
+        new (locales?: string | string[], options?: DateTimeFormatOptions): DateTimeFormat;
+        (locales?: string | string[], options?: DateTimeFormatOptions): DateTimeFormat;
+        supportedLocalesOf(locales: string | string[], options?: DateTimeFormatOptions): string[];
+        readonly prototype: DateTimeFormat;
+    }
+
+    var DateTimeFormat: DateTimeFormatConstructor;
+}
+
+interface String {
+    /**
+     * Determines whether two strings are equivalent in the current or specified locale.
+     * @param that String to compare to target string
+     * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used. This parameter must conform to BCP 47 standards; see the Intl.Collator object for details.
+     * @param options An object that contains one or more properties that specify comparison options. see the Intl.Collator object for details.
+     */
+    localeCompare(that: string, locales?: string | string[], options?: Intl.CollatorOptions): number;
+}
+
+interface Number {
+    /**
+     * Converts a number to a string by using the current or specified locale.
+     * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+     * @param options An object that contains one or more properties that specify comparison options.
+     */
+    toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions): string;
+}
+
+interface Date {
+    /**
+     * Converts a date and time to a string by using the current or specified locale.
+     * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+     * @param options An object that contains one or more properties that specify comparison options.
+     */
+    toLocaleString(locales?: string | string[], options?: Intl.DateTimeFormatOptions): string;
+    /**
+     * Converts a date to a string by using the current or specified locale.
+     * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+     * @param options An object that contains one or more properties that specify comparison options.
+     */
+    toLocaleDateString(locales?: string | string[], options?: Intl.DateTimeFormatOptions): string;
+
+    /**
+     * Converts a time to a string by using the current or specified locale.
+     * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+     * @param options An object that contains one or more properties that specify comparison options.
+     */
+    toLocaleTimeString(locales?: string | string[], options?: Intl.DateTimeFormatOptions): string;
+}
