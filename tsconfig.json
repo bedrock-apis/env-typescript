@@ -2,12 +2,11 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
-    "lib": ["es2024"],
+    "noLib": true,
     "moduleResolution": "bundler",
-    "strict": false,
-    "noImplicitAny": false,
-    "types": ["@minecraft/server","./index.d.ts"]
+    "strict": true,
+    "noImplicitAny": true,
+    "noEmit": true,
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": ["types/**/*.d.ts"],
 }

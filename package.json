@@ -1,2 +1,10 @@
 {
+  "name": "env-typescript",
+  "version": "1.0.0-alpha.1",
+  "description": "",
+  "types": "/src/index.d.ts",
+  "keywords": [],
+  "author": "bedrock-apis",
+  "license": "MIT",
+  "packageManager": "pnpm@10.20.0"
 }
