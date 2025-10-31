@@ -3,3 +3,13 @@ import { system } from "@minecraft/server";
 system.run(() => {
     console.warn("Hello, Minecraft Bedrock Edition!");
 });
+
+type QuickJSGlobals = "Object" | "Function" | "Error" | "EvalError" | "RangeError" | "ReferenceError" | "SyntaxError" | "TypeError" | "URIError" | "InternalError" | "AggregateError" | "Array" | "parseInt" | "parseFloat" | "isNaN" | "isFinite" | "decodeURI" | "decodeURIComponent" | "encodeURI" | "encodeURIComponent" | "escape" | "unescape" | "Infinity" | "NaN" | "undefined" | "Number" | "Boolean" | "String" | "Math" | "Reflect" | "Symbol" | "eval" | "globalThis" | "Date" | "RegExp" | "JSON" | "Proxy" | "Map" | "Set" | "WeakMap" | "WeakSet" | "ArrayBuffer" | "SharedArrayBuffer" | "Uint8ClampedArray" | "Int8Array" | "Uint8Array" | "Int16Array" | "Uint16Array" | "Int32Array" | "Uint32Array" | "BigInt64Array" | "BigUint64Array" | "Float32Array" | "Float64Array" | "DataView" | "Promise" | "BigInt" | "console" | "print";
+type QuickJSGlobal = {[k in QuickJSGlobals]: void};
+type CurrentGlobal = {[k in keyof typeof globalThis]: void};
+const quickJS: QuickJSGlobal = null!;
+const currentJS: CurrentGlobal = null!;
+
+
+// Correct Type check
+console.log(quickJS satisfies CurrentGlobal, currentJS satisfies QuickJSGlobal);
