@@ -15,6 +15,12 @@ importers:
       '@bedrock-apis/env-typescript':
         specifier: link:..
         version: link:..
+      '@types/node':
+        specifier: ^24.9.2
+        version: 24.9.2
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
 
 packages:
 
@@ -30,6 +36,17 @@ packages:
   '@minecraft/vanilla-data@1.21.120':
     resolution: {integrity: sha512-Ku2oGRngFsJ/w34Fkx3T5BP5LnMGapKtrxO0ftVQFab8ipc9Yli+65B4MzorqH4zmcmoxyT1RE/1CA9JLfYEpw==}
 
+  '@types/node@24.9.2':
+    resolution: {integrity: sha512-uWN8YqxXxqFMX2RqGOrumsKeti4LlmIMIyV0lgut4jx7KQBcBiW6vkDtIBvHnHIquwNfJhk8v2OtmO8zXWHfPA==}
+
+  typescript@5.9.3:
+    resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
+  undici-types@7.16.0:
+    resolution: {integrity: sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw==}
+
 snapshots:
 
   '@minecraft/common@1.2.0': {}
@@ -40,3 +57,11 @@ snapshots:
       '@minecraft/vanilla-data': 1.21.120
 
   '@minecraft/vanilla-data@1.21.120': {}
+
+  '@types/node@24.9.2':
+    dependencies:
+      undici-types: 7.16.0
+
+  typescript@5.9.3: {}
+
+  undici-types@7.16.0: {}
