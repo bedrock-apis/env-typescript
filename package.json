@@ -1,10 +1,21 @@
 {
   "name": "env-types",
-  "version": "1.0.0-alpha.1",
-  "description": "",
-  "main":"",
-  "types": "index.d.ts",
-  "keywords": [],
+  "version": "1.0.0-beta",
+  "description": "A collection of environment-specific TypeScript type definitions for engines with non-standard versioning and selective feature support across versions.",
+  "main": "",
+  "types": "lib.d.ts",
+  "keywords": [
+    "typescript",
+    "ts-types",
+    "type-declarations",
+    "engine-types"
+  ],
+  "files": [
+    "./lib.d.ts",
+    "./README.md",
+    "./LICENSE",
+    "./package.json"
+  ],
   "author": "bedrock-apis",
   "license": "MIT",
   "packageManager": "pnpm@10.20.0"

@@ -1,22 +1,42 @@
 /// <reference no-default-lib="true"/>
 /// <reference path="./lib/lib.es5.d.ts"/>
-/// <reference path="./lib/lib.es2015.d.ts"/>
+/// <reference path="./lib/lib.es2015.core.d.ts"/>
+/// <reference path="./lib/lib.es2015.iterable.d.ts"/>
+/// <reference path="./lib/lib.es2015.collection.d.ts"/>
+/// <reference path="./lib/lib.es2015.generator.d.ts"/>
+/// <reference path="./lib/lib.es2015.promise.d.ts"/>
+/// <reference path="./lib/lib.es2015.proxy.d.ts"/>
+/// <reference path="./lib/lib.es2015.reflect.d.ts"/>
+/// <reference path="./lib/lib.es2015.symbol.d.ts"/>
+/// <reference path="./lib/lib.es2015.symbol.wellknown.d.ts"/>
+
 /// <reference path="./lib/lib.es2016.array.include.d.ts" />
 
-//<reference path="./main.d.ts" />
-type Console = {
-        log: (...data: any[]) => void;
-        warn: (...data: any[]) => void;
-        error: (...data: any[]) => void;
-        info: (...data: any[]) => void;
-};
-declare var console: Console;
-declare var print: Console["info"]; //iS it log, or info? is info equal to log? 
+/// <reference path="./lib/lib.es2017.arraybuffer.d.ts"/>
+/// <reference path="./lib/lib.es2017.sharedmemory.d.ts"/>
+/// <reference path="./lib/lib.es2017.date.d.ts"/>
+/// <reference path="./lib/lib.es2017.object.d.ts"/>
+/// <reference path="./lib/lib.es2017.string.d.ts"/>
+/// <reference path="./lib/lib.es2017.typedarrays.d.ts"/>
 
-interface InternalError extends Error { }
-interface InternalErrorConstructor {
-    new(message?: string): InternalError;
-    (message?: string): InternalError;
-    readonly prototype: InternalError;
-}
-declare var InternalError: new ()=> InternalError;
+/// <reference path="./lib/lib.es2018.asyncgenerator.d.ts"/>
+/// <reference path="./lib/lib.es2018.asynciterable.d.ts"/>
+/// <reference path="./lib/lib.es2018.promise.d.ts"/>
+/// <reference path="./lib/lib.es2018.regexp.d.ts"/>
+
+/// <reference path="./lib/lib.es2019.symbol.d.ts"/>
+/// <reference path="./lib/lib.es2019.string.d.ts"/>
+/// <reference path="./lib/lib.es2019.object.d.ts"/>
+/// <reference path="./lib/lib.es2019.array.d.ts"/>
+
+/// <reference path="./lib/lib.es2020.sharedmemory.d.ts"/>
+/// <reference path="./lib/lib.es2020.bigint.d.ts"/>
+/// <reference path="./lib/lib.es2020.date.d.ts"/>
+/// <reference path="./lib/lib.es2020.number.d.ts"/>
+/// <reference path="./lib/lib.es2020.promise.d.ts"/>
+/// <reference path="./lib/lib.es2020.string.d.ts"/>
+/// <reference path="./lib/lib.es2020.symbol.wellknown.d.ts"/>
+
+/// <reference path="./lib/lib.es2021.promise.d.ts"/>
+/// <reference path="./lib/lib.es2021.string.d.ts"/>
+/// <reference path="./lib/lib.extended-quickjs.d.ts"/>
