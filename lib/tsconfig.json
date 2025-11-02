@@ -8,5 +8,5 @@
     "noImplicitAny": true,
     "noEmit": true,
   },
-  "include": ["lib/**/*.d.ts", "./index.d.ts"]
+  "include": ["*.d.ts"]
 }
