@@ -36,7 +36,7 @@ Install the package as a development dependency, and add it to the known types i
 This package is in **beta**, and we welcome contributions from the community. You can help by:
 
 * Adding missing type definitions.
-* Fixing inconsistencies between types and engine environment.
+* Fixing inconsistencies between types and engine environment apis.
 * Suggesting new features or improvements.
 
 Please visit our [GitHub repository](https://github.com/bedrock-apis/env-types) to submit issues or pull requests.
