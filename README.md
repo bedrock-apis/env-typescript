@@ -18,7 +18,7 @@ Install the package as a development dependency, and add it to the known types i
 {
     "compilerOptions": {
         "noLib": true,
-        "types": ["@bedrock-apis/env-typescript"],
+        "types": ["@bedrock-apis/env-types"],
         // ...
     }
     // ...
@@ -29,7 +29,7 @@ Install the package as a development dependency, and add it to the known types i
 
 - Generate a basic set of methods and properties for each global class.
 - Compare and extend these definitions against TypeScript’s standard global types.
-- Continuously update with contributions and new engine features.
+- Continuously update with help of contributions.
 
 ## Contributing
 

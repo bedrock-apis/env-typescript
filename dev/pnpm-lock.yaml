@@ -12,7 +12,7 @@ importers:
         specifier: ^2.3.0
         version: 2.3.0(@minecraft/common@1.2.0)(@minecraft/vanilla-data@1.21.120)
     devDependencies:
-      '@bedrock-apis/env-typescript':
+      '@bedrock-apis/env-types':
         specifier: link:..
         version: link:..
       '@types/node':

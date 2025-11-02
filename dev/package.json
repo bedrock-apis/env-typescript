@@ -11,7 +11,7 @@
   "license": "ISC",
   "packageManager": "pnpm@10.20.0",
   "devDependencies": {
-    "@bedrock-apis/env-typescript": "link:..",
+    "@bedrock-apis/env-types": "link:..",
     "@types/node": "^24.9.2",
     "typescript": "^5.9.3"
   },
