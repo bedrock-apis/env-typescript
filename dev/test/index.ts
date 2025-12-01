@@ -4,8 +4,6 @@ type CurrentGlobal = { [k in keyof typeof globalThis]: void };
 const quickJS: QuickJSGlobal = null!;
 const currentJS: CurrentGlobal = null!;
 export const a = 0;
+
 // Correct Type check, we need to add specified missing apis
 console.log(quickJS satisfies CurrentGlobal, currentJS satisfies QuickJSGlobal);
-
-const obj: number = 0;
-obj
