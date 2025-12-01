@@ -31,6 +31,17 @@ interface InternalErrorConstructor {
 }
 declare var InternalError: new () => InternalError;
 
+interface Object {
+    /**
+     * @internal
+     * @deprecated
+     * @protected
+     * @ignore
+     */
+    get __proto__(): object;
+    set __proto__(prototype: object);
+}
+
 interface ObjectConstructor {
     /**
      * Get class name

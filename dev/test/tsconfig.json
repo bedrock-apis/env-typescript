@@ -89,6 +89,8 @@
     "noEmit": true,
     /* Type Checking */
     "strict": true,                                      /* Enable all strict type-checking options. */
+    "checkJs": true,
+    "allowJs": true
     // "noImplicitAny": true,                            /* Enable error reporting for expressions and declarations with an implied 'any' type. */
     // "strictNullChecks": true,                         /* When type checking, take into account 'null' and 'undefined'. */
     // "strictFunctionTypes": true,                      /* When assigning functions, check to ensure parameters and the return values are subtype-compatible. */
@@ -114,7 +116,8 @@
     //"skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
   "include": [
-    "./**/*.ts"
+    "./**/*.ts",
+    "./**/*.js"
   ],
   "exclude": [
     "node_modules"
